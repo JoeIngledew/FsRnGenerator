@@ -23,13 +23,18 @@ let logM (log : TraceWriter option) (s : string) =
     | Some l -> l.Info(s)
     | None -> ()
 
+let wrapDupes (xs : string []) =
+    xs
+    |> Array.mapi (fun ix x -> if xs.[0..ix] |> Array.filter (fun s -> s = x) |> Array.length > 1 then sprintf "\"%s\"" x else x)
+
 let packStrings (xs : string[]) =
     let len = xs.Length
-    if len = 1 then xs.[0]
-    elif len = 2 then sprintf "%s and %s" xs.[0] xs.[1]
+    let modXs = wrapDupes xs
+    if len = 1 then modXs.[0]
+    elif len = 2 then sprintf "%s and %s" modXs.[0] modXs.[1]
     else 
-        let commaSep = System.String.Join(", ", xs.[0..len-3])
-        sprintf "%s, %s and %s" commaSep xs.[len-2] xs.[len-1]
+        let commaSep = System.String.Join(", ", modXs.[0..len-3])
+        sprintf "%s, %s and %s" commaSep modXs.[len-2] modXs.[len-1]
 
 let getQuirkString (qs  : string []) =
     if qs.Length > 0 then
