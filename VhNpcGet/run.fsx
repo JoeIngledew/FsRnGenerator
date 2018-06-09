@@ -51,13 +51,20 @@ let getSampleDesc (name: string) (desc: string[]) (quirks: string[]) (tier : int
 
 let mutable rng = new Random()
 
+let addQuotes (s : string) =
+    sprintf "\"%s\"" s
+
+let maybeWrapInQuotes (s : string) =
+    let p = rng.Next(1, 101)
+    if p > 96 then addQuotes s else s
+
 let getGenderIdentifier (log : TraceWriter option) = 
     sprintf "RNG is %A" rng |> logM log
     let percent = rng.Next(1, 101)
     sprintf "gender percent is %i" percent |> logM log
     if percent > 80 then "woman"
     elif percent > 60 then "man"
-    else "person"
+    else "person" |> maybeWrapInQuotes
 
 let getTier =
     let percent = rng.Next(101)
@@ -152,7 +159,7 @@ let Run(req: HttpRequestMessage, log: TraceWriter) =
             match descs with 
             | Choice2Of2 s -> return req.CreateResponse(HttpStatusCode.BadRequest, s)
             | Choice1Of2 ds ->
-                let retName = getRandomInCommaSepSet l names
+                let retName = getRandomInCommaSepSet l names |> maybeWrapInQuotes
                 let retQuirks = qs
                 let retDesc = ds
                 let tier = getTier
