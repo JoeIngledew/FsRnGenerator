@@ -1,20 +1,38 @@
 #r "System.Net.Http"
 #r "Newtonsoft.Json"
+#r "System.Xml.dll"
+#r "System.Runtime.Serialization.dll"
 
 open System
 open System.Net
 open System.Net.Http
 open Newtonsoft.Json
+open Microsoft.FSharp.Reflection
+open System.IO
+open System.Reflection
+open System.Runtime.Serialization
+open System.Runtime.Serialization.Formatters.Binary
+open System.Runtime.Serialization.Json
+open System.Text
+open System.Xml
+open System.Xml.Serialization
 
 let defaultMin = 0
 let defaultMax = 3 
 
+[<DataContract>]
 type Npc = {
+    [<field: DataMember>]
     name: string
+    [<field: DataMember>]
     descriptors: string []
+    [<field: DataMember>]
     quirks: string []
+    [<field: DataMember>]
     asTier: int
+    [<field: DataMember>]
     genderId: string
+    [<field: DataMember>]
     sampleDesc: string
 }
 
