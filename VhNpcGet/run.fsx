@@ -21,6 +21,7 @@ let defaultMin = 0
 let defaultMax = 3 
 
 [<DataContract>]
+[<CLIMutable>]
 type Npc = {
     [<field: DataMember>]
     name: string
