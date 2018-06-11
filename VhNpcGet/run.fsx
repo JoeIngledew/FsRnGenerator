@@ -20,21 +20,15 @@ open System.Xml.Serialization
 let defaultMin = 0
 let defaultMax = 3 
 
-[<DataContract>]
 [<CLIMutable>]
+[<JsonObject(MemberSerialization = MemberSerialization.OptIn)>]
 type Npc = {
-    [<field: DataMember>]
-    name: string
-    [<field: DataMember>]
-    descriptors: string []
-    [<field: DataMember>]
-    quirks: string []
-    [<field: DataMember>]
-    asTier: int
-    [<field: DataMember>]
-    genderId: string
-    [<field: DataMember>]
-    sampleDesc: string
+    [<JsonProperty>] mutable name: string
+    [<JsonProperty>] mutable descriptors: string []
+    [<JsonProperty>] mutable quirks: string []
+    [<JsonProperty>] mutable asTier: int
+    [<JsonProperty>] mutable genderId: string
+    [<JsonProperty>] mutable sampleDesc: string
 }
 
 let logM (log : TraceWriter option) (s : string) =
